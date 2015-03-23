@@ -4,14 +4,16 @@
     android:id="@+id/homepage_background"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="80dp">
 
     <TextView
         android:id="@+id/homepage_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:padding="16dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textSize="18sp"
         tools:text="水情吃緊3月23日起提升工業用水節水目標，並自4月1日起桃園、板新、林口地區供5停2！"/>
 

@@ -1,6 +1,7 @@
 package com.jarvislin.waterrestrictioninfo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jarvislin.waterrestrictioninfo.model.DetailNews;
 import com.jarvislin.waterrestrictioninfo.model.HomepageNews;
 
 import java.util.ArrayList;
@@ -41,11 +43,24 @@ public class HomepageNewsAdapter extends RecyclerView.Adapter<HomepageNewsAdapte
         } else {
             holder.background.setBackgroundColor(Color.WHITE);
         }
+        holder.background.setOnClickListener(clickNews(position));
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    private View.OnClickListener clickNews(final int position){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("link", mList.get(position).getLink());
+                intent.setClass(mContext, DetailNewsActivity.class);
+                mContext.startActivity(intent);
+            }
+        };
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

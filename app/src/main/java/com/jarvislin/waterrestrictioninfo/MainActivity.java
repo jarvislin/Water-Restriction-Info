@@ -1,5 +1,6 @@
 package com.jarvislin.waterrestrictioninfo;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.support.v7.app.ActionBarActivity;
@@ -12,13 +13,18 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import com.filippudak.ProgressPieView.ProgressPieView;
+import com.jarvislin.waterrestrictioninfo.model.Reservoir;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FetchTask.OnFetchListener {
@@ -37,9 +43,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    private static FetchTask mFetchTask = new FetchTask();
+    private static FetchTask mFetchHomepageTask = new FetchTask();
+    private static FetchTask mFetchReservoirTask = new FetchTask();
     private static ProgressBar mHomepageProgress;
     private static RecyclerView mHomepageList;
+    private static RecyclerView mReservoirList;
+    private static ProgressBar mReservoirProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +90,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
 
 
-        mFetchTask.setOnFetchListener(this);
+        mFetchHomepageTask.setOnFetchListener(this);
+        mFetchReservoirTask.setOnFetchListener(this);
 
     }
 
@@ -128,7 +138,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void OnHomepageFetchFinished() {
         mHomepageProgress.setVisibility(View.GONE);
         mHomepageList.setAdapter(new HomepageNewsAdapter(this, DataFetcher.getInstance().getHomepageNews()));
-        Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -138,7 +147,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void OnReservoirFetchFinished() {
-
+        mReservoirProgress.setVisibility(View.GONE);
+        mReservoirList.setAdapter(new ReservoirAdapter(this, DataFetcher.getInstance().getReservoir()));
     }
 
     /**
@@ -214,12 +224,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     mHomepageProgress = (ProgressBar) rootView.findViewById(R.id.homepage_progress);
                     mHomepageList = (RecyclerView) rootView.findViewById(R.id.homepage_list);
                     mHomepageList.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    mHomepageList.setHasFixedSize(true);
-                    mFetchTask.execute(ActionType.HOMEPAGE);
+                    mFetchHomepageTask.execute(ActionType.HOMEPAGE);
                     break;
 
                 case 2:
-
+                    rootView = inflater.inflate(R.layout.fragment_reservoir, container, false);
+                    mReservoirProgress = (ProgressBar) rootView.findViewById(R.id.reservoir_progress);
+                    mReservoirList = (RecyclerView) rootView.findViewById(R.id.reservoir_list);
+                    mReservoirList.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    mFetchReservoirTask.execute(ActionType.RESERVOIR);
                     break;
             }
             return rootView;
