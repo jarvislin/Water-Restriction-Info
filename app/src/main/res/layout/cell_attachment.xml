@@ -9,6 +9,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textSize="18sp"
-        android:textColor="@color/abc_primary_text_material_light"/>
+        android:textColor="@color/blue500"/>
 
 </LinearLayout>

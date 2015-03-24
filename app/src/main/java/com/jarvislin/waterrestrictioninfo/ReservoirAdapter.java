@@ -39,6 +39,30 @@ public class ReservoirAdapter extends RecyclerView.Adapter<ReservoirAdapter.View
         holder.time.setText(mList.get(position).getTime());
         holder.capacity.setProgress((int)mList.get(position).getCapacity());
         holder.capacity.setText(String.valueOf(mList.get(position).getCapacity()) + "%");
+        holder.capacity.setTextSize(20);
+
+
+        //set color
+        //50 ~ 100 = blue
+        //30 ~ 49 = orange
+        //0 ~ 29 = red
+
+        if(mList.get(position).getCapacity() >= 50) {
+            // blue
+            holder.capacity.setProgressColor(mContext.getResources().getColor(R.color.blue300));
+            holder.capacity.setStrokeColor(mContext.getResources().getColor(R.color.blue500));
+            holder.capacity.setTextColor(mContext.getResources().getColor(R.color.blue900));
+        } else if(mList.get(position).getCapacity() < 50 && mList.get(position).getCapacity() >= 30) {
+            //orange
+            holder.capacity.setProgressColor(mContext.getResources().getColor(R.color.orange300));
+            holder.capacity.setStrokeColor(mContext.getResources().getColor(R.color.orange500));
+            holder.capacity.setTextColor(mContext.getResources().getColor(R.color.orange900));
+        } else {
+            //red
+            holder.capacity.setProgressColor(mContext.getResources().getColor(R.color.red300));
+            holder.capacity.setStrokeColor(mContext.getResources().getColor(R.color.red500));
+            holder.capacity.setTextColor(mContext.getResources().getColor(R.color.red900));
+        }
     }
 
     @Override

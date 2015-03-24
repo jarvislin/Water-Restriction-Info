@@ -38,11 +38,6 @@ public class HomepageNewsAdapter extends RecyclerView.Adapter<HomepageNewsAdapte
     @Override
     public void onBindViewHolder(HomepageNewsAdapter.ViewHolder holder, int position) {
         holder.title.setText(mList.get(position).getTitle());
-        if(position % 2 == 1){
-            holder.background.setBackgroundColor(mContext.getResources().getColor(R.color.light_primary));
-        } else {
-            holder.background.setBackgroundColor(Color.WHITE);
-        }
         holder.background.setOnClickListener(clickNews(position));
     }
 
