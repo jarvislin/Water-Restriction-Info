@@ -23,7 +23,7 @@
 Apache License 2.0
 - https://github.com/jarvislin/Water-Restriction-Info/blob/master/LICENSE
 
-特別感謝
+參考來源
 ---------
 - http://water.taiwanstat.com/
 - https://github.com/washwashsleep/TaiwanReservoirAPI
