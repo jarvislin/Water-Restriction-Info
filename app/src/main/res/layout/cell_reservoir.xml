@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="190dp"
         android:orientation="horizontal">
 
         <com.filippudak.ProgressPieView.ProgressPieView
@@ -30,7 +30,23 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
+                android:textStyle="bold"
                 android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:text="水位差："
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/reservoir_differential_level"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="match_parent"

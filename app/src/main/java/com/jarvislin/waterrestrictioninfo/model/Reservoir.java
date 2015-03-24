@@ -5,8 +5,9 @@ package com.jarvislin.waterrestrictioninfo.model;
  */
 public class Reservoir {
     private String name;
-    private float capacity;
+    private String differentialLevel;
     private String time;
+    private float capacity;
 
     public String getName() {
         return name;
@@ -30,5 +31,13 @@ public class Reservoir {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getDifferentialLevel() {
+        return differentialLevel;
+    }
+
+    public void setDifferentialLevel(String differentialLevel) {
+        this.differentialLevel = differentialLevel;
     }
 }

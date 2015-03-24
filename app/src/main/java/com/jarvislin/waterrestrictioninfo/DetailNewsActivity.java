@@ -2,8 +2,10 @@ package com.jarvislin.waterrestrictioninfo;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jarvislin.waterrestrictioninfo.model.DetailNews;
 
@@ -30,6 +33,11 @@ public class DetailNewsActivity extends ActionBarActivity implements FetchTask.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_news);
 
+        //set actionbar
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
         //get url
         Intent intent = getIntent();
         link = intent.getStringExtra("link");
@@ -44,14 +52,30 @@ public class DetailNewsActivity extends ActionBarActivity implements FetchTask.O
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return (super.onOptionsItemSelected(menuItem));
+    }
+
+    @Override
     public void OnHomepageFetchFinished() {
 
     }
 
     @Override
     public void OnDetailFetchFinished() {
+
         DetailNews detailNews = DataFetcher.getInstance().getDetailNews();
-        mContent.setText(detailNews.getDetail());
+        if(null == detailNews.getDetail()){
+            Toast.makeText(this, "訊息讀取失敗，請稍候再重試。", Toast.LENGTH_LONG).show();
+        } else {
+            mContent.setText(detailNews.getDetail());
+        }
+
         HashMap<String, String> map = detailNews.getAttachment();
         for(String fileName : map.keySet()) {
             LayoutInflater inflater = LayoutInflater.from(this);

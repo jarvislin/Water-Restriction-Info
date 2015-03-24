@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.filippudak.ProgressPieView.ProgressPieView;
@@ -41,6 +40,18 @@ public class ReservoirAdapter extends RecyclerView.Adapter<ReservoirAdapter.View
         holder.capacity.setText(String.valueOf(mList.get(position).getCapacity()) + "%");
         holder.capacity.setTextSize(20);
 
+        if(mList.get(position).getDifferentialLevel().equals("--")) {
+            holder.differentialLevel.setText("無資料");
+            holder.differentialLevel.setTextColor(mContext.getResources().getColor(R.color.secondary_text));
+        } else if(Float.valueOf(mList.get(position).getDifferentialLevel()) >= 0) {
+            holder.differentialLevel.setText("昨日 +" + mList.get(position).getDifferentialLevel() + " 公尺");
+            holder.differentialLevel.setTextColor(mContext.getResources().getColor(R.color.blue500));
+        } else {
+            holder.differentialLevel.setText("昨日 " + mList.get(position).getDifferentialLevel() + " 公尺");
+            holder.differentialLevel.setTextColor(mContext.getResources().getColor(R.color.red500));
+        }
+
+
 
         //set color
         //50 ~ 100 = blue
@@ -74,12 +85,14 @@ public class ReservoirAdapter extends RecyclerView.Adapter<ReservoirAdapter.View
 
         public TextView name;
         public TextView time;
+        public TextView differentialLevel;
         public ProgressPieView capacity;
 
         public ViewHolder(View v) {
             super(v);
             name = (TextView)v.findViewById(R.id.reservoir_name);
             time = (TextView)v.findViewById(R.id.reservoir_time);
+            differentialLevel = (TextView)v.findViewById(R.id.reservoir_differential_level);
             capacity = (ProgressPieView)v.findViewById(R.id.reservoir_capacity);
         }
     }
