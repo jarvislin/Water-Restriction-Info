@@ -22,8 +22,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.filippudak.ProgressPieView.ProgressPieView;
+import com.jarvislin.waterrestrictioninfo.Util.ToolsHelper;
 import com.jarvislin.waterrestrictioninfo.model.Reservoir;
 
 
@@ -115,6 +117,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void OnHomepageFetchFinished() {
         mHomepageProgress.setVisibility(View.GONE);
         mHomepageList.setAdapter(new HomepageNewsAdapter(this, DataFetcher.getInstance().getHomepageNews()));
+        if(DataFetcher.getInstance().getHomepageNews().size() == 0){
+            Toast.makeText(this, "訊息公告讀取失敗，請稍候再重試。", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -126,6 +131,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void OnReservoirFetchFinished() {
         mReservoirProgress.setVisibility(View.GONE);
         mReservoirList.setAdapter(new ReservoirAdapter(this, DataFetcher.getInstance().getReservoir()));
+        if(DataFetcher.getInstance().getReservoir().size() == 0){
+            Toast.makeText(this, "水庫資訊讀取失敗，請稍候再重試。", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -201,7 +209,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     mHomepageProgress = (ProgressBar) rootView.findViewById(R.id.homepage_progress);
                     mHomepageList = (RecyclerView) rootView.findViewById(R.id.homepage_list);
                     mHomepageList.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    mFetchHomepageTask.execute(ActionType.HOMEPAGE);
+                    if(ToolsHelper.isNetworkAvailable(getActivity())) {
+                        mFetchHomepageTask.execute(ActionType.HOMEPAGE);
+                    } else {
+                        Toast.makeText(getActivity(), "未偵測到網路，請確認網路狀況。", Toast.LENGTH_LONG).show();
+                        getActivity().finish();
+                    }
+
                     break;
 
                 case 2:
@@ -209,7 +223,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     mReservoirProgress = (ProgressBar) rootView.findViewById(R.id.reservoir_progress);
                     mReservoirList = (RecyclerView) rootView.findViewById(R.id.reservoir_list);
                     mReservoirList.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    mFetchReservoirTask.execute(ActionType.RESERVOIR);
+                    if(ToolsHelper.isNetworkAvailable(getActivity())) {
+                        mFetchReservoirTask.execute(ActionType.RESERVOIR);
+                    } else {
+                        Toast.makeText(getActivity(), "未偵測到網路，請確認網路狀況。", Toast.LENGTH_LONG).show();
+                        getActivity().finish();
+                    }
                     break;
             }
             return rootView;

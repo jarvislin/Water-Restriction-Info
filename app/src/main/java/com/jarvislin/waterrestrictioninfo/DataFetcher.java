@@ -19,6 +19,10 @@ public class DataFetcher {
     private ArrayList<HomepageNews> homepageNews = new ArrayList<HomepageNews>();
     private DetailNews detailNews;
     private ArrayList<Reservoir> reservoir = new ArrayList<Reservoir>();
+    private int retryHomepage = 0;
+    private int retryReservoir = 0;
+    private int retryDetail = 0;
+    private String tempLink;
 
     private DataFetcher() {
     }
@@ -51,7 +55,13 @@ public class DataFetcher {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (retryHomepage < 3) {
+                fetchHomepageNews();
+                retryHomepage++;
+            } else {
+                ex.printStackTrace();
+                retryHomepage = 0;
+            }
         }
     }
 
@@ -60,6 +70,8 @@ public class DataFetcher {
     }
 
     public void fetchDetailNews(String link) {
+
+        tempLink = link;
 
         try {
             Document doc = Jsoup.connect("http://www.water.gov.tw/subject/" + link).get();
@@ -80,9 +92,14 @@ public class DataFetcher {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (retryDetail < 3) {
+                fetchDetailNews(tempLink);
+                retryDetail++;
+            } else {
+                ex.printStackTrace();
+                retryDetail = 0;
+            }
         }
-
     }
 
     public DetailNews getDetailNews() {
@@ -95,24 +112,28 @@ public class DataFetcher {
             Elements tableTags = doc.getElementsByAttributeValue("class", "list nowrap").select("table");
             Elements tdTags = tableTags.select("td").not("td[colspan]");
 
-
             for (int i = 0; i < tdTags.size(); i += 12) {
-                if(i + 12 <= tdTags.size() - 1 ) {
+                if (i + 12 <= tdTags.size() - 1) {
                     if ((i + 11) % 12 == 11 && tdTags.get(i + 11).text().equals("--")) {
                         continue;
                     } else {
                         Reservoir temp = new Reservoir();
                         temp.setName(tdTags.get(i).text());
                         temp.setTime(tdTags.get(i + 8).text());
+                        temp.setDifferentialLevel(tdTags.get(i + 6).text());
                         temp.setCapacity(Float.valueOf(tdTags.get(i + 11).text().replace(" %", "")));
                         reservoir.add(temp);
                     }
                 }
             }
-
-
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (retryReservoir < 3) {
+                fetchReservoir();
+                retryReservoir++;
+            } else {
+                ex.printStackTrace();
+                retryReservoir = 0;
+            }
         }
     }
 
