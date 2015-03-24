@@ -30,8 +30,10 @@ public class FetchTask extends AsyncTask<ActionType, Void, ActionType> {
                 DataFetcher.getInstance().fetchHomepageNews();
                 break;
             case DETAIL:
+                DataFetcher.getInstance().fetchDetailNews(DetailNewsActivity.link);
                 break;
             case RESERVOIR:
+                DataFetcher.getInstance().fetchReservoir();
                 break;
         }
 

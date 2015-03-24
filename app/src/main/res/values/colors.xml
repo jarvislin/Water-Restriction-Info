@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="light_primary">#BBDEFB</color>
+    <color name="divider">#B6B6B6</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="blue900">#0D47A1</color>
+    <color name="blue500">#2196F3</color>
+    <color name="blue300">#64B5F6</color>
+    <color name="orange900">#E65100</color>
+    <color name="orange500">#FF9800</color>
+    <color name="orange300">#FFB74D</color>
+    <color name="red900">#B71C1C</color>
+    <color name="red500">#F44336</color>
+    <color name="red300">#E57373</color>
 </resources>
