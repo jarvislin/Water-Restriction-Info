@@ -45,8 +45,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    private static FetchTask mFetchHomepageTask = new FetchTask();
-    private static FetchTask mFetchReservoirTask = new FetchTask();
+    private static FetchTask mFetchHomepageTask;
+    private static FetchTask mFetchReservoirTask;
     private static ProgressBar mHomepageProgress;
     private static RecyclerView mHomepageList;
     private static RecyclerView mReservoirList;
@@ -92,6 +92,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
 
 
+        mFetchHomepageTask = new FetchTask();
+        mFetchReservoirTask = new FetchTask();
         mFetchHomepageTask.setOnFetchListener(this);
         mFetchReservoirTask.setOnFetchListener(this);
 
@@ -117,7 +119,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void OnHomepageFetchFinished() {
         mHomepageProgress.setVisibility(View.GONE);
         mHomepageList.setAdapter(new HomepageNewsAdapter(this, DataFetcher.getInstance().getHomepageNews()));
-        if(DataFetcher.getInstance().getHomepageNews().size() == 0){
+        if (DataFetcher.getInstance().getHomepageNews().size() == 0) {
             Toast.makeText(this, "訊息公告讀取失敗，請稍候再重試。", Toast.LENGTH_LONG).show();
         }
     }
@@ -128,10 +130,18 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     @Override
+    protected void onDestroy() {
+
+        Thread.interrupted();
+
+        super.onDestroy();
+    }
+
+    @Override
     public void OnReservoirFetchFinished() {
         mReservoirProgress.setVisibility(View.GONE);
         mReservoirList.setAdapter(new ReservoirAdapter(this, DataFetcher.getInstance().getReservoir()));
-        if(DataFetcher.getInstance().getReservoir().size() == 0){
+        if (DataFetcher.getInstance().getReservoir().size() == 0) {
             Toast.makeText(this, "水庫資訊讀取失敗，請稍候再重試。", Toast.LENGTH_LONG).show();
         }
     }
@@ -209,7 +219,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     mHomepageProgress = (ProgressBar) rootView.findViewById(R.id.homepage_progress);
                     mHomepageList = (RecyclerView) rootView.findViewById(R.id.homepage_list);
                     mHomepageList.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    if(ToolsHelper.isNetworkAvailable(getActivity())) {
+                    if (ToolsHelper.isNetworkAvailable(getActivity())) {
                         mFetchHomepageTask.execute(ActionType.HOMEPAGE);
                     } else {
                         Toast.makeText(getActivity(), "未偵測到網路，請確認網路狀況。", Toast.LENGTH_LONG).show();
@@ -223,7 +233,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     mReservoirProgress = (ProgressBar) rootView.findViewById(R.id.reservoir_progress);
                     mReservoirList = (RecyclerView) rootView.findViewById(R.id.reservoir_list);
                     mReservoirList.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    if(ToolsHelper.isNetworkAvailable(getActivity())) {
+                    if (ToolsHelper.isNetworkAvailable(getActivity())) {
                         mFetchReservoirTask.execute(ActionType.RESERVOIR);
                     } else {
                         Toast.makeText(getActivity(), "未偵測到網路，請確認網路狀況。", Toast.LENGTH_LONG).show();
