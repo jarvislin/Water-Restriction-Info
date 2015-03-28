@@ -39,7 +39,7 @@ public class DataFetcher {
     public void fetchHomepageNews() {
 
         try {
-            Document doc = Jsoup.connect("http://www.water.gov.tw/subject/index.asp").get();
+            Document doc = Jsoup.connect("http://www.water.gov.tw/subject/information_list.asp").get();
             Elements tdTags = doc.getElementsByAttributeValue("summary", "內容顯示區").select("td");
             Elements aTags = tdTags.select("a").not("a[title]").not("a[onMouseOut]").not("a[class]").not("a[alt]");
 
