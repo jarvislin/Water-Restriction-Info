@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.jarvislin.waterrestrictioninfo.model.DetailNews;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 
 
@@ -85,6 +87,23 @@ public class DetailNewsActivity extends ActionBarActivity implements FetchTask.O
             tv.setOnClickListener(clickFile(map.get(fileName)));
             mDetailLayout.addView(v);
         }
+
+        //get url in detail
+        String [] parts = detailNews.getDetail().split("\\s+");
+
+        for( String item : parts ) try {
+            URL url = new URL(item);
+            // it's a url
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View v = inflater.inflate(R.layout.cell_attachment, null);
+            TextView tv = (TextView)v.findViewById(R.id.file_name);
+            tv.setText("內文網址");
+            tv.setOnClickListener(clickFile(item));
+            mDetailLayout.addView(v);
+        } catch (MalformedURLException e) {
+            // not a url
+        }
+
         mDetailProgress.setVisibility(View.GONE);
     }
 
