@@ -111,17 +111,17 @@ public class DataFetcher {
             Document doc = Jsoup.connect("http://fhy.wra.gov.tw/ReservoirPage_2011/StorageCapacity.aspx").get();
             Elements tableTags = doc.getElementsByAttributeValue("class", "list nowrap").select("table");
             Elements tdTags = tableTags.select("td").not("td[colspan]");
-
-            for (int i = 0; i < tdTags.size(); i += 12) {
-                if (i + 12 <= tdTags.size() - 1) {
-                    if ((i + 11) % 12 == 11 && tdTags.get(i + 11).text().equals("--")) {
+            Reservoir temp;
+            for (int i = 0; i < tdTags.size(); i += 11) {
+                if (i + 11 <= tdTags.size() - 1) {
+                    if ((i + 10) % 11 == 10 && tdTags.get(i + 10).text().equals("--")) {
                         continue;
                     } else {
-                        Reservoir temp = new Reservoir();
+                        temp = new Reservoir();
                         temp.setName(tdTags.get(i).text());
-                        temp.setTime(tdTags.get(i + 8).text());
+                        temp.setTime(tdTags.get(i + 7).text());
                         temp.setDifferentialLevel(tdTags.get(i + 6).text());
-                        temp.setCapacity(Float.valueOf(tdTags.get(i + 11).text().replace(" %", "")));
+                        temp.setCapacity(Float.valueOf(tdTags.get(i + 10).text().replace(" %", "")));
                         reservoir.add(temp);
                     }
                 }
@@ -129,10 +129,10 @@ public class DataFetcher {
         } catch (Exception ex) {
             if (retryReservoir < 3) {
                 fetchReservoir();
+//                ex.printStackTrace();
                 retryReservoir++;
             } else {
                 ex.printStackTrace();
-                retryReservoir = 0;
             }
         }
     }
